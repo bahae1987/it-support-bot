@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agent IT Support</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f5f6f8;
+  --surface: #ffffff;
+  --surface2: #f0f2f5;
+  --border: rgba(0,0,0,0.08);
+  --border-md: rgba(0,0,0,0.14);
+  --text: #111213;
+  --text-2: #5a5f6a;
+  --text-3: #9199a6;
+  --blue: #1a6fc4;
+  --blue-light: #e8f1fb;
+  --blue-mid: #b8d4f0;
+  --green: #1a9e6e;
+  --green-light: #e6f5ef;
+  --radius-sm: 8px;
+  --shadow: 0 2px 12px rgba(0,0,0,0.07), 0 0 0 0.5px rgba(0,0,0,0.07);
+}
+
+html, body { height: 100%; font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); }
+
+.shell { display: flex; height: 100vh; max-width: 1100px; margin: 0 auto; }
+
+/* SIDEBAR */
+.sidebar {
+  width: 245px; background: var(--surface);
+  border-right: 0.5px solid var(--border);
+  display: flex; flex-direction: column; flex-shrink: 0;
+}
+.logo {
+  display: flex; align-items: center; gap: 10px;
+  padding: 20px 16px 16px; border-bottom: 0.5px solid var(--border);
+}
+.logo-icon {
+  width: 34px; height: 34px; border-radius: 9px;
+  background: linear-gradient(135deg, #ff6b35, #f7c59f);
+  display: flex; align-items: center; justify-content: center; font-size: 17px;
+}
+.logo-text strong { display: block; font-size: 13.5px; font-weight: 600; }
+.logo-text span   { font-size: 11px; color: var(--text-2); }
+
+.sb-section { padding: 12px 12px 4px; }
+.sb-label { font-size: 10.5px; font-weight: 600; color: var(--text-3); letter-spacing: 0.06em; text-transform: uppercase; padding: 0 4px 8px; }
+
+.sb-btn {
+  width: 100%; display: flex; align-items: center; gap: 9px;
+  padding: 8px 10px; border-radius: var(--radius-sm);
+  border: none; background: none; cursor: pointer;
+  font-size: 13px; color: var(--text-2); text-align: left;
+  transition: background 0.12s, color 0.12s;
+}
+.sb-btn:hover { background: var(--surface2); color: var(--text); }
+.sb-btn.active { background: var(--blue-light); color: var(--blue); font-weight: 500; }
+.sb-btn .ico { font-size: 15px; }
+
+.sidebar-bottom {
+  margin-top: auto; padding: 12px 16px;
+  border-top: 0.5px solid var(--border);
+}
+.model-badge {
+  display: flex; align-items: center; gap: 8px;
+  background: #fff8f0; border: 0.5px solid #fcd285;
+  border-radius: var(--radius-sm); padding: 8px 10px;
+  font-size: 11.5px; color: #b86800;
+}
+.model-badge strong { font-weight: 600; }
+.online-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+
+/* MAIN */
+.main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+.topbar {
+  display: flex; align-items: center; gap: 12px;
+  padding: 13px 20px; background: var(--surface);
+  border-bottom: 0.5px solid var(--border); flex-shrink: 0;
+}
+.agent-ava {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--blue-light);
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+}
+.agent-meta strong { display: block; font-size: 14px; font-weight: 600; }
+.agent-meta span   { font-size: 12px; color: var(--text-2); }
+.tb-actions { margin-left: auto; display: flex; gap: 6px; }
+
+.icon-btn {
+  width: 32px; height: 32px; border-radius: var(--radius-sm);
+  border: 0.5px solid var(--border-md); background: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; transition: background 0.12s;
+}
+.icon-btn:hover { background: var(--surface2); }
+
+/* QUICK BAR */
+.quick-bar {
+  display: flex; gap: 7px; padding: 9px 20px;
+  background: var(--surface); border-bottom: 0.5px solid var(--border);
+  flex-wrap: wrap; flex-shrink: 0;
+}
+.qchip {
+  display: flex; align-items: center; gap: 5px;
+  padding: 5px 11px; font-size: 12px; font-weight: 500;
+  border-radius: 20px; border: 0.5px solid var(--border-md);
+  background: var(--surface); color: var(--text-2);
+  cursor: pointer; white-space: nowrap; transition: all 0.12s;
+}
+.qchip:hover { background: var(--blue-light); color: var(--blue); border-color: var(--blue-mid); }
+
+/* MESSAGES */
+#messages {
+  flex: 1; overflow-y: auto;
+  padding: 20px; display: flex; flex-direction: column; gap: 16px;
+  scroll-behavior: smooth;
+}
+#messages::-webkit-scrollbar { width: 4px; }
+#messages::-webkit-scrollbar-thumb { background: var(--border-md); border-radius: 4px; }
+
+.sep {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 11px; color: var(--text-3); font-weight: 500;
+}
+.sep::before, .sep::after { content: ''; flex: 1; height: 0.5px; background: var(--border); }
+
+.msg-row { display: flex; gap: 9px; align-items: flex-end; max-width: 82%; }
+.msg-row.bot  { align-self: flex-start; }
+.msg-row.user { align-self: flex-end; flex-direction: row-reverse; }
+
+.msg-ava {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; background: var(--blue-light);
+}
+.msg-ava.u { background: var(--surface2); }
+
+.bubble {
+  padding: 10px 14px; font-size: 13.5px; line-height: 1.65; border-radius: 14px;
+}
+.bot  .bubble { background: var(--surface); border: 0.5px solid var(--border); border-bottom-left-radius: 4px; box-shadow: var(--shadow); }
+.user .bubble { background: var(--blue); color: #fff; border-bottom-right-radius: 4px; }
+.bubble strong { font-weight: 600; }
+.bubble code { background: rgba(0,0,0,0.07); padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+.bubble ol, .bubble ul { padding-left: 18px; margin-top: 5px; }
+.bubble li { margin-bottom: 3px; }
+
+/* TICKET BANNER */
+.ticket-banner {
+  margin-top: 12px; display: flex; align-items: center; gap: 12px;
+  background: var(--blue-light); border: 0.5px solid var(--blue-mid);
+  border-radius: var(--radius-sm); padding: 11px 13px; flex-wrap: wrap;
+}
+.tb-icon { font-size: 20px; flex-shrink: 0; }
+.tb-body { flex: 1; min-width: 160px; }
+.tb-body strong { display: block; font-size: 13px; color: var(--blue); font-weight: 600; }
+.tb-body span   { font-size: 12px; color: var(--text-2); line-height: 1.4; }
+.tb-btn {
+  padding: 7px 14px; border-radius: var(--radius-sm);
+  background: var(--blue); color: #fff; border: none; cursor: pointer;
+  font-size: 12.5px; font-weight: 600; font-family: inherit;
+  white-space: nowrap; transition: background 0.12s; flex-shrink: 0;
+}
+.tb-btn:hover { background: #155aa0; }
+
+/* TYPING */
+.dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--text-3); animation: blink 1.2s infinite; margin: 0 2px; }
+.dot:nth-child(2) { animation-delay: 0.2s; }
+.dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes blink { 0%,80%,100%{opacity:0.2} 40%{opacity:1} }
+
+/* INPUT */
+.input-zone {
+  padding: 12px 20px 16px; background: var(--surface);
+  border-top: 0.5px solid var(--border); flex-shrink: 0;
+}
+.input-wrap {
+  display: flex; align-items: flex-end; gap: 9px;
+  background: var(--surface2); border: 0.5px solid var(--border-md);
+  border-radius: 14px; padding: 7px 9px 7px 15px; transition: border-color 0.15s;
+}
+.input-wrap:focus-within { border-color: var(--blue); }
+#user-input {
+  flex: 1; border: none; background: none; resize: none;
+  font-size: 13.5px; font-family: inherit; color: var(--text);
+  outline: none; min-height: 22px; max-height: 110px; line-height: 1.5;
+}
+#user-input::placeholder { color: var(--text-3); }
+.send-btn {
+  width: 35px; height: 35px; border-radius: 10px;
+  background: var(--blue); border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0; transition: background 0.12s, transform 0.1s;
+}
+.send-btn:hover { background: #155aa0; }
+.send-btn:active { transform: scale(0.95); }
+.send-btn:disabled { background: var(--border-md); cursor: default; }
+.hint { font-size: 11px; color: var(--text-3); margin-top: 6px; text-align: center; }
+
+@media (max-width: 650px) { .sidebar { display: none; } .msg-row { max-width: 92%; } }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-icon">🛠️</div>
+      <div class="logo-text">
+        <strong>IT Support</strong>
+        <span>Agent IA — Portail</span>
+      </div>
+    </div>
+
+    <div class="sb-section">
+      <div class="sb-label">Navigation</div>
+      <button class="sb-btn active"><span class="ico">💬</span> Assistant IT</button>
+      <button class="sb-btn" onclick="goToTicketPage()"><span class="ico">🎫</span> Créer un ticket</button>
+      <button class="sb-btn" onclick="clearChat()"><span class="ico">🔄</span> Nouvelle conversation</button>
+      <button class="sb-btn" onclick="downloadHistory()"><span class="ico">💾</span> Exporter l'historique</button>
+    </div>
+
+    <div class="sb-section">
+      <div class="sb-label">Sujets fréquents</div>
+      <button class="sb-btn" onclick="quickSend('Problème réseau ou VPN')"><span class="ico">🌐</span> Réseau & VPN</button>
+      <button class="sb-btn" onclick="quickSend('Problème de compte ou mot de passe')"><span class="ico">🔑</span> Comptes & accès</button>
+      <button class="sb-btn" onclick="quickSend('Problème matériel ou périphérique')"><span class="ico">🖥️</span> Matériel</button>
+      <button class="sb-btn" onclick="quickSend('Problème Microsoft 365 ou Teams')"><span class="ico">📧</span> Microsoft 365</button>
+      <button class="sb-btn" onclick="quickSend('Alerte sécurité ou phishing')"><span class="ico">🛡️</span> Sécurité</button>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="model-badge">
+        <span class="online-dot"></span>
+        <div>
+          <strong>Groq — Llama 3.3 70B</strong><br>
+          <span style="font-size:10.5px;color:#5a5f6a">Gratuit · Opérationnel</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <div class="agent-ava">🤖</div>
+      <div class="agent-meta">
+        <strong>Agent IT Support</strong>
+        <span>Propulsé par Groq · Llama 3.3 70B</span>
+      </div>
+      <div class="tb-actions">
+        <button class="icon-btn" title="Nouvelle conversation" onclick="clearChat()">🔄</button>
+        <button class="icon-btn" title="Exporter" onclick="downloadHistory()">💾</button>
+      </div>
+    </div>
+
+    <div class="quick-bar">
+      <button class="qchip" onclick="quickSend('Mon PC ne démarre plus')">🖥️ PC bloqué</button>
+      <button class="qchip" onclick="quickSend('Je ne peux pas me connecter au VPN')">🌐 VPN</button>
+      <button class="qchip" onclick="quickSend('Réinitialiser mon mot de passe')">🔑 Mot de passe</button>
+      <button class="qchip" onclick="quickSend('Mon imprimante ne fonctionne plus')">🖨️ Imprimante</button>
+      <button class="qchip" onclick="quickSend('Problème avec Teams ou Outlook')">📧 M365</button>
+      <button class="qchip" onclick="quickSend('Email de phishing suspect')">🛡️ Phishing</button>
+    </div>
+
+    <div id="messages" role="log" aria-live="polite"></div>
+
+    <div class="input-zone">
+      <div class="input-wrap">
+        <textarea id="user-input" rows="1" placeholder="Décrivez votre problème IT…" aria-label="Message"></textarea>
+        <button class="send-btn" id="send-btn" aria-label="Envoyer">➤</button>
+      </div>
+      <p class="hint">Entrée pour envoyer · Maj+Entrée pour nouvelle ligne</p>
+    </div>
+  </main>
+</div>
+
+<script>
+// ╔══════════════════════════════════════════════════════════╗
+// ║           CONFIGURATION — À MODIFIER UNE SEULE FOIS     ║
+// ╠══════════════════════════════════════════════════════════╣
+// ║  1. Collez votre clé API Groq ci-dessous                ║
+// ║     Obtenez-la sur : https://console.groq.com/keys      ║
+// ║                                                          ║
+// ║  2. Indiquez l'URL de votre page "Créer un ticket"      ║
+// ╚══════════════════════════════════════════════════════════╝
+
+const GROQ_API_KEY  = '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';   // ← Remplacez par votre clé gsk_...
+const TICKET_URL    = '#creer-ticket';          // ← Remplacez par l'URL de votre page ticket Power Apps
+const GROQ_MODEL    = 'llama-3.3-70b-versatile';
+
+// ═══════════════════════════════════════════════════════════
+//   NE PAS MODIFIER EN DESSOUS DE CETTE LIGNE
+// ═══════════════════════════════════════════════════════════
+
+const SYSTEM_PROMPT = `Tu es un agent support IT expert, bienveillant et efficace intégré dans un portail Power Apps d'entreprise.
+Tu réponds TOUJOURS en français, de façon concise, claire et professionnelle.
+
+## Domaines d'expertise
+- Dépannage Windows 10/11, macOS, Linux
+- Réseau : VPN, Wi-Fi, proxy, DNS, pare-feu
+- Comptes & identités : Active Directory, Azure AD, SSO, MFA, mots de passe
+- Microsoft 365 : Outlook, Teams, SharePoint, OneDrive
+- Matériel : PC, imprimantes, écrans, périphériques
+- Logiciels, licences, installations
+- Cybersécurité : phishing, ransomware, antivirus
+
+## Règles de réponse
+1. Identifie le problème rapidement.
+2. Propose toujours des étapes numérotées que l'utilisateur peut essayer lui-même.
+3. Utilise **gras** pour les points importants.
+4. À la fin de chaque réponse, pose la question : "Est-ce que cela a résolu votre problème ?"
+5. Si l'utilisateur répond que le problème persiste, réponds normalement ET ajoute le tag [CREER_TICKET] à la fin.
+
+Sois direct et rassurant. Maximum 250 mots. Langue : français uniquement.`;
+
+let history = [];
+const messagesEl = document.getElementById('messages');
+const inputEl    = document.getElementById('user-input');
+const sendBtn    = document.getElementById('send-btn');
+
+function scrollBottom() { messagesEl.scrollTop = messagesEl.scrollHeight; }
+
+function fmt(t) {
+  return t
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    .replace(/^(\d+\.\s)/gm, m => '<br>' + m)
+    .replace(/\n/g, '<br>');
+}
+
+function addSep(label) {
+  const d = document.createElement('div');
+  d.className = 'sep'; d.textContent = label;
+  messagesEl.appendChild(d);
+}
+
+function addBot(text) {
+  const showBanner = /\[CREER_TICKET\]/i.test(text);
+  const clean = text.replace(/\[CREER_TICKET\]/gi, '').trim();
+  const row = document.createElement('div');
+  row.className = 'msg-row bot';
+  const banner = showBanner ? `
+    <div class="ticket-banner">
+      <div class="tb-icon">📋</div>
+      <div class="tb-body">
+        <strong>Problème non résolu ?</strong>
+        <span>Notre équipe IT prend le relais. Créez un ticket depuis le portail.</span>
+      </div>
+      <button class="tb-btn" onclick="goToTicketPage()">Créer un ticket →</button>
+    </div>` : '';
+  row.innerHTML = `<div class="msg-ava">🤖</div><div class="bubble">${fmt(clean)}${banner}</div>`;
+  messagesEl.appendChild(row);
+  scrollBottom();
+}
+
+function addUser(text) {
+  const row = document.createElement('div');
+  row.className = 'msg-row user';
+  row.innerHTML = `<div class="msg-ava u">👤</div><div class="bubble">${fmt(text)}</div>`;
+  messagesEl.appendChild(row);
+  scrollBottom();
+}
+
+function showTyping() {
+  const row = document.createElement('div');
+  row.id = 'typing'; row.className = 'msg-row bot';
+  row.innerHTML = `<div class="msg-ava">🤖</div><div class="bubble"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>`;
+  messagesEl.appendChild(row);
+  scrollBottom();
+}
+function removeTyping() { document.getElementById('typing')?.remove(); }
+function setLoading(v)  { sendBtn.disabled = v; inputEl.disabled = v; }
+
+async function callGroq(userText) {
+  history.push({ role: 'user', content: userText });
+  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_API_KEY },
+    body: JSON.stringify({
+      model: GROQ_MODEL,
+      messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...history],
+      max_tokens: 1000,
+      temperature: 0.4
+    })
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error?.message || 'Erreur API Groq (code ' + res.status + ')');
+  }
+  const data  = await res.json();
+  const reply = data.choices?.[0]?.message?.content || 'Pas de réponse.';
+  history.push({ role: 'assistant', content: reply });
+  return reply;
+}
+
+async function sendMessage(text) {
+  text = text.trim();
+  if (!text) return;
+  if (GROQ_API_KEY === 'VOTRE_CLE_GROQ_ICI') {
+    addBot("⚠️ **Clé API manquante.** Ouvrez le fichier HTML et remplacez `VOTRE_CLE_GROQ_ICI` par votre clé Groq.");
+    return;
+  }
+  addUser(text);
+  setLoading(true);
+  showTyping();
+  try {
+    const reply = await callGroq(text);
+    removeTyping();
+    addBot(reply);
+  } catch (e) {
+    removeTyping();
+    addBot('**Erreur :** ' + e.message);
+  }
+  setLoading(false);
+  inputEl.focus();
+}
+
+function quickSend(t) { sendMessage(t); }
+
+function goToTicketPage() {
+  if (TICKET_URL === '#creer-ticket') {
+    alert('Configurez TICKET_URL dans le fichier HTML pour pointer vers votre page Power Apps.');
+  } else if (window.parent !== window) {
+    window.parent.location.href = TICKET_URL;
+  } else {
+    window.location.href = TICKET_URL;
+  }
+}
+
+function clearChat() {
+  history = [];
+  messagesEl.innerHTML = '';
+  addSep('Aujourd\'hui');
+  addBot('Bonjour ! Nouvelle conversation démarrée. Comment puis-je vous aider ?');
+}
+
+function downloadHistory() {
+  if (!history.length) { alert('Aucune conversation à exporter.'); return; }
+  const txt = history.map(m => '[' + m.role.toUpperCase() + ']\n' + m.content).join('\n\n---\n\n');
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([txt], { type: 'text/plain;charset=utf-8' }));
+  a.download = 'support-it-' + new Date().toISOString().slice(0,10) + '.txt';
+  a.click();
+}
+
+sendBtn.addEventListener('click', () => {
+  const v = inputEl.value;
+  if (v.trim()) { inputEl.value = ''; inputEl.style.height = 'auto'; sendMessage(v); }
+});
+
+inputEl.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    const v = inputEl.value;
+    if (v.trim()) { inputEl.value = ''; inputEl.style.height = 'auto'; sendMessage(v); }
+  }
+});
+
+inputEl.addEventListener('input', () => {
+  inputEl.style.height = 'auto';
+  inputEl.style.height = Math.min(inputEl.scrollHeight, 110) + 'px';
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  addSep('Aujourd\'hui');
+  addBot("Bonjour ! Je suis votre **agent IT Support**. Décrivez votre problème et je vous guide pas à pas.\n\nSi le problème persiste malgré mes conseils, je vous dirigerai vers la création d'un ticket. 👆");
+});
+</script>
+</body>
+</html>
