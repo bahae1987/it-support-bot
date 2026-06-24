@@ -242,7 +242,7 @@ html, body { height: 100%; font-family: 'Inter', system-ui, sans-serif; backgrou
         <span class="online-dot"></span>
         <div>
           <strong>Groq — Llama 3.3 70B</strong><br>
-          <span style="font-size:10.5px;color:#5a5f6a">Gratuit · Opérationnel</span>
+          <span style="font-size:10.5px;color:#5a5f6a">· Opérationnel</span>
         </div>
       </div>
     </div>
@@ -254,7 +254,7 @@ html, body { height: 100%; font-family: 'Inter', system-ui, sans-serif; backgrou
       <div class="agent-ava">🤖</div>
       <div class="agent-meta">
         <strong>Agent IT Support</strong>
-        <span>Propulsé par Groq · Llama 3.3 70B</span>
+        <span>· Llama 3.3 70B</span>
       </div>
       <div class="tb-actions">
         <button class="icon-btn" title="Nouvelle conversation" onclick="clearChat()">🔄</button>
@@ -301,7 +301,7 @@ const GROQ_MODEL    = 'llama-3.3-70b-versatile';
 //   NE PAS MODIFIER EN DESSOUS DE CETTE LIGNE
 // ═══════════════════════════════════════════════════════════
 
-const SYSTEM_PROMPT = `Tu es un agent support IT expert, bienveillant et efficace intégré dans un portail Power Apps d'entreprise.
+const SYSTEM_PROMPT = `Tu es un agent support IT expert, bienveillant et efficace.
 Tu réponds TOUJOURS en français, de façon concise, claire et professionnelle.
 
 ## Domaines d'expertise
@@ -318,7 +318,7 @@ Tu réponds TOUJOURS en français, de façon concise, claire et professionnelle.
 2. Propose toujours des étapes numérotées que l'utilisateur peut essayer lui-même.
 3. Utilise **gras** pour les points importants.
 4. À la fin de chaque réponse, pose la question : "Est-ce que cela a résolu votre problème ?"
-5. Si l'utilisateur répond que le problème persiste, réponds normalement ET ajoute le tag [CREER_TICKET] à la fin.
+5. Si l'utilisateur répond que le problème persiste, réponds normalement ET ajoute le tag [CREER_TICKET SUR LE PORTAIL IT FLUORALPAHA] à la fin.
 
 Sois direct et rassurant. Maximum 250 mots. Langue : français uniquement.`;
 
