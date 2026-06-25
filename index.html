@@ -284,23 +284,9 @@ html, body { height: 100%; font-family: 'Inter', system-ui, sans-serif; backgrou
 </div>
 
 <script>
-// ╔══════════════════════════════════════════════════════════╗
-// ║           CONFIGURATION — À MODIFIER UNE SEULE FOIS     ║
-// ╠══════════════════════════════════════════════════════════╣
-// ║  1. Collez votre clé API Groq ci-dessous                ║
-// ║     Obtenez-la sur : https://console.groq.com/keys      ║
-// ║                                                          ║
-// ║  2. Indiquez l'URL de votre page "Créer un ticket"      ║
-// ╚══════════════════════════════════════════════════════════╝
-
 const GROQ_API_KEY  = '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';   // ← Remplacez par votre clé gsk_...
 const TICKET_URL    = 'https://apps.powerapps.com/play/e/default-ac3369aa-5f44-4e15-83dd-bf751dc2fc5c/a/c4f42a28-b11c-4f42-8f1f-df05816bea58?tenantId=ac3369aa-5f44-4e15-83dd-bf751dc2fc5c&hint=53bd31e5-cfc4-4112-94da-eb348225c33f&sourcetime=1780672294152#';          // ← Remplacez par l'URL de votre page ticket Power Apps
 const GROQ_MODEL    = 'llama-3.3-70b-versatile';
-
-// ═══════════════════════════════════════════════════════════
-//   NE PAS MODIFIER EN DESSOUS DE CETTE LIGNE
-// ═══════════════════════════════════════════════════════════
-
 const SYSTEM_PROMPT = `Tu es un agent support IT expert, bienveillant et efficace.
 Tu réponds TOUJOURS en français, de façon concise, claire et professionnelle.
 
